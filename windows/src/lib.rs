@@ -21,7 +21,7 @@ impl WlanInterfaces {
     pub fn as_slice(&self) -> Option<&[WiFi::WLAN_INTERFACE_INFO]> {
         let WiFi::WLAN_INTERFACE_INFO_LIST { InterfaceInfo, dwNumberOfItems, .. } =
             unsafe { self.interfaces.as_ref() }?;
-        let count = dwNumberOfItems.clone().try_into().unwrap();
+        let count = (*dwNumberOfItems).try_into().unwrap();
         Some(unsafe { core::slice::from_raw_parts(InterfaceInfo.as_ptr(), count) })
     }
 }
@@ -40,7 +40,7 @@ pub struct WlanProfileList {
 impl WlanProfileList {
     pub fn as_slice(&self) -> Option<&[WiFi::WLAN_PROFILE_INFO]> {
         let WiFi::WLAN_PROFILE_INFO_LIST { ProfileInfo, dwNumberOfItems, .. } = unsafe { self.profiles.as_ref() }?;
-        let count = dwNumberOfItems.clone().try_into().unwrap();
+        let count = (*dwNumberOfItems).try_into().unwrap();
         Some(unsafe { core::slice::from_raw_parts(ProfileInfo.as_ptr(), count) })
     }
 }
