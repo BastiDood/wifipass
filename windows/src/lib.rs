@@ -1,5 +1,6 @@
 use windows::{
-    core::{GUID, PWSTR},
+    core::{GUID, HSTRING, PWSTR},
+    Data::Xml::Dom::XmlDocument,
     Win32::{
         Foundation::{HANDLE, INVALID_HANDLE_VALUE, WIN32_ERROR},
         NetworkManagement::WiFi,
@@ -56,6 +57,13 @@ pub struct WlanProfileXml {
 }
 
 impl WlanProfileXml {
+    pub fn load(&self) -> Result<XmlDocument> {
+        let doc = XmlDocument::new()?;
+        let hstring = HSTRING::from_wide(unsafe { self.xml.as_wide() })?;
+        doc.LoadXml(&hstring)?;
+        Ok(doc)
+    }
+
     pub fn display(&self) -> impl core::fmt::Display + '_ {
         unsafe { self.xml.display() }
     }
