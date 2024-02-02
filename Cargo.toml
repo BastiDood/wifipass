@@ -1,0 +1,10 @@
+[workspace]
+members = ["windows"]
+
+[package]
+name = "wifipass"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies.wifipass-windows]
+path = "windows"
