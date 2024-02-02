@@ -29,7 +29,7 @@ fn main() -> Result<()> {
                 continue;
             };
 
-            let Some(node) = node.ChildNodes()?.First()?.try_find(|node| {
+            let Some(security) = node.ChildNodes()?.First()?.try_find(|node| {
                 let name = node.NodeName()?;
                 Result::Ok(name == "security")
             })?
@@ -37,7 +37,34 @@ fn main() -> Result<()> {
                 continue;
             };
 
+            let Some(node) = security.ChildNodes()?.First()?.try_find(|node| {
+                let name = node.NodeName()?;
+                Result::Ok(name == "authEncryption")
+            })?
+            else {
+                continue;
+            };
+
             let Some(node) = node.ChildNodes()?.First()?.try_find(|node| {
+                let name = node.NodeName()?;
+                Result::Ok(name == "authentication")
+            })?
+            else {
+                continue;
+            };
+
+            let authentication = node.InnerText()?;
+            if authentication == "open" {
+                println!("{name} ::");
+                continue;
+            }
+
+            if authentication != "WPA2" && authentication != "WPA2PSK" {
+                // Skip this because we don't know how to interpret this authentication method
+                continue;
+            }
+
+            let Some(node) = security.ChildNodes()?.First()?.try_find(|node| {
                 let name = node.NodeName()?;
                 Result::Ok(name == "sharedKey")
             })?
