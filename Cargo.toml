@@ -6,5 +6,10 @@ name = "wifipass"
 version = "0.1.0"
 edition = "2021"
 
+[dependencies.tabled]
+version = "0.16"
+default-features = false
+features = ["derive"]
+
 [dependencies.wifipass-windows]
 path = "windows"

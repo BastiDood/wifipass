@@ -1,5 +1,5 @@
 use windows::{
-    core::{GUID, HSTRING, PWSTR},
+    core::{GUID, PWSTR},
     Data::Xml::Dom::XmlDocument,
     Win32::{
         Foundation::{HANDLE, INVALID_HANDLE_VALUE, WIN32_ERROR},
@@ -7,7 +7,7 @@ use windows::{
     },
 };
 
-pub use windows::core::{Result, PCWSTR};
+pub use windows::core::{Result, HSTRING, PCWSTR};
 
 pub struct Wlan {
     handle: HANDLE,
@@ -25,10 +25,10 @@ impl WlanInterfaceList {
         Some(Self { interfaces })
     }
 
-    pub fn as_slice(&self) -> Option<&[WiFi::WLAN_INTERFACE_INFO]> {
+    pub fn as_slice(&self) -> &[WiFi::WLAN_INTERFACE_INFO] {
         let WiFi::WLAN_INTERFACE_INFO_LIST { ref InterfaceInfo, dwNumberOfItems, .. } = *self.interfaces;
         let count = dwNumberOfItems.try_into().unwrap();
-        Some(unsafe { core::slice::from_raw_parts(InterfaceInfo.as_ptr(), count) })
+        unsafe { core::slice::from_raw_parts(InterfaceInfo.as_ptr(), count) }
     }
 }
 
@@ -51,10 +51,10 @@ impl WlanProfileList {
         Some(Self { profiles })
     }
 
-    pub fn as_slice(&self) -> Option<&[WiFi::WLAN_PROFILE_INFO]> {
+    pub fn as_slice(&self) -> &[WiFi::WLAN_PROFILE_INFO] {
         let WiFi::WLAN_PROFILE_INFO_LIST { ref ProfileInfo, dwNumberOfItems, .. } = *self.profiles;
         let count = dwNumberOfItems.try_into().unwrap();
-        Some(unsafe { core::slice::from_raw_parts(ProfileInfo.as_ptr(), count) })
+        unsafe { core::slice::from_raw_parts(ProfileInfo.as_ptr(), count) }
     }
 }
 
