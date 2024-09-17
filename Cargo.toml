@@ -13,3 +13,6 @@ features = ["derive"]
 
 [dependencies.wifipass-windows]
 path = "windows"
+
+[profile.release]
+lto = true
